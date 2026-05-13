@@ -67,7 +67,7 @@ int main() {
     scanf("%d", &n);
 
     if(n == 0){
-        printf("TOTAL = %d", total);
+        printf("TOTAL %d", total++);
         return 0;
     }
     char ** list = printhasil(n, &ctr);
