@@ -7,40 +7,74 @@
  * 
  */
 //https://prepinsta.com/c-program/generate-all-combinations-of-balanced-parentheses/
+//https://www.w3resource.com/c-programming-exercises/practice/c-programming-practice-exercises-11.php
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
-void trigger(int n, int pos, int open, int close){
-    static char str[100];
+static char** printhasil(int n, int* givesize)
+{
+    int left, right, cap = 5000, ctr = 0;
+    char *stack = malloc(2 * n + 1);
+    char** parentes = malloc(cap * sizeof(char *));
 
-    if(close == n){
-        printf("%s \n", str);
-        return;
-    }
-    else{
-        if(open > close){
-            str[pos] = ')';
-            trigger(n, pos+1, open, close+1);
+    char *p = stack;
+    left = right = 0;
+    stack[2 * n] = '\0';
+
+    while(p != stack || ctr == 0){
+        if(left == n && right == n){
+            parentes[ctr] = malloc(2 * n + 1);
+            strcpy(parentes[ctr], stack);
+            ctr++;
+
+            while(--p != stack){
+                if(*p == '('){
+                    if(--left > right){
+                        *p++ = ')';
+                        right++;
+                        break;
+                    }
+                }
+                else{
+                    right--;
+                }
+            }
         }
-        if(open < n){
-            str[pos] = '(';
-            trigger(n, pos+1, open+1, close);
+        else{
+            while (left < n)
+            {
+                *p++ = '(';
+                left++;
+            }
+            while(right < n){
+                *p++ = ')';
+                right++;
+            }  
         }
     }
+    *givesize = ctr;
+    return parentes;
 }
 
 int main() {
     int n;
-    //int trigger = 0;
+    int ctr;
+    int total = 0;
 
     scanf("%d", &n);
-    if(n > 0){
-        trigger(n, 0, 0, 0);
+
+    char ** list = printhasil(n, &ctr);
+
+    for(n = 0; n<ctr; n++){
+        printf("%s\n", list[n]);
+        total++;
     }
-    //print(n);
     getchar();
+    printf("TOTAL %d", total);
+    //print(n);
     return 0;
 }
  
